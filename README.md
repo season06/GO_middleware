@@ -48,9 +48,9 @@
 ```go
   IP := c.ClientIP()
 ```
-3-3.  Redis has characteristics of 'key-value'.
-   Let 'IP' as key, 'IP access times' as value.
-   Use function in redis "Get" to check value of key.
+3-3.  Redis has characteristics of 'key-value'.<br>
+   Let 'IP' as key, 'IP access times' as value.<br>
+   Use function in redis "Get" to check value of key.<br>
    if 'error' presents the key does not exist, set the new key with expire time.
 ```go
 var ip_counter int
