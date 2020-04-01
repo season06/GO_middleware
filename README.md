@@ -1,7 +1,7 @@
 # GO_middleware
 
 ## Installation & Run
-```
+```python
   # Download Gin Framework
   $ go get github.com/gin-gonic/gin
   
@@ -40,15 +40,15 @@
 ```
 
 ## 3. Implement Limit Middleware
-3-1 Connet to the database.
+3-1.  Connet to the database.
 ```go
   client := RedisClient()
 ```
-3-2 Use function in gin framework "ClientIP()" to get the IP address.
+3-2.  Use function in gin framework "ClientIP()" to get the IP address.
 ```go
   IP := c.ClientIP()
 ```
-3-3 Redis has characteristics of 'key-value'.
+3-3.  Redis has characteristics of 'key-value'.
    Let 'IP' as key, 'IP access times' as value.
    Use function in redis "Get" to check value of key.
    if 'error' presents the key does not exist, set the new key with expire time.
@@ -62,7 +62,7 @@ if err == redis.Nil {
 	client.Set(IP, counting, 3600*time.Second)
 }
 ```
-4-4 Use function in redis "TTL" to get the time in which the key will expire.
+4-4.  Use function in redis "TTL" to get the time in which the key will expire.
 ```go
 ttl, _ := client.TTL(IP).Result()
 counting = ip_counter + 1
@@ -74,7 +74,7 @@ if ttl < time.Duration(0) {
 	client.Del(IP)
 }
 ```
-4-5  If the usage limit is exceeded, response http.statue(429) and show the information in the header.
+4-5.  If the usage limit is exceeded, response http.statue(429) and show the information in the header.
 ```go
 if counting > COUNT_LIMITER {
 	remain_time := strconv.Itoa(counting - COUNT_LIMITER)
