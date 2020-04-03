@@ -12,6 +12,15 @@
   $ go get github.com/go-redis/redis
 ```
 
+## Build
+```
+git clone https://github.com/season06/GO_middleware
+cd GO_middleware
+go run main.go
+```
+- http://localhost:8000
+- testing with postman
+
 ## Require Parameters
 - No more than 1,000 requests from the same IP per hour
 ```go
