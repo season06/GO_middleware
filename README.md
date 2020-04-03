@@ -1,5 +1,8 @@
 # GO_middleware
 
+## Environment
+- golang 1.12.6
+
 ## Installation & Run
 ```python
   # Download Gin Framework
@@ -10,7 +13,7 @@
 ```
 
 ## Require Parameters
-  -> No more than 1,000 requests from the same IP per hour
+- No more than 1,000 requests from the same IP per hour
 ```go
   var TIME_LIMITER = 3600
   var COUNT_LIMITER = 1000
@@ -40,18 +43,21 @@
 ```
 
 ## 3. Implement Limit Middleware
-3-1.  Connet to the database.
+3-1.
+- Connet to the database.
 ```go
   client := RedisClient()
 ```
-3-2.  Use function in gin framework "ClientIP()" to get the IP address.
+3-2.
+- Use function in gin framework "ClientIP()" to get the IP address.
 ```go
   IP := c.ClientIP()
 ```
-3-3.  Redis has characteristics of 'key-value'.<br>
-   Let 'IP' as key, 'IP access times' as value.<br>
-   Use function in redis "Get" to check value of key.<br>
-   if 'error' presents the key does not exist, set the new key with expire time.
+3-3.
+- Redis has characteristics of 'key-value'.<br>
+- Let 'IP' as key, 'IP access times' as value.<br>
+- Use function in redis "Get" to check value of key.<br>
+- if 'error' presents the key does not exist, set the new key with expire time.
 ```go
 var ip_counter int
 
@@ -62,19 +68,21 @@ if err == redis.Nil {
 	client.Set(IP, counting, 3600*time.Second)
 }
 ```
-4-4.  Use function in redis "TTL" to get the time in which the key will expire.
+4-4.
+- Use function in redis "TTL" to get the time in which the key will expire.
 ```go
 ttl, _ := client.TTL(IP).Result()
 counting = ip_counter + 1
 client.Set(IP, counting, ttl)
 ```
-Make sure if ttl == -1 or ttl == -2, delete this key.
+- Make sure if ttl == -1 or ttl == -2, delete this key.
 ```go
 if ttl < time.Duration(0) {
 	client.Del(IP)
 }
 ```
-4-5.  If the usage limit is exceeded, response http.statue(429) and show the information in the header.
+4-5.
+- If the usage limit is exceeded, response http.statue(429) and show the information in the header.
 ```go
 if counting > COUNT_LIMITER {
 	remain_time := strconv.Itoa(counting - COUNT_LIMITER)
